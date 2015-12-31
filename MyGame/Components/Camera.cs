@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyGame.Model;
+using System.Drawing;
 
 namespace MyGame.Components
 {
@@ -11,6 +12,7 @@ namespace MyGame.Components
     {
         private Game game;
         private Input input;
+        private Vector2 renderSize;
 
         public readonly float MAXSPEED = 100f;
 
@@ -18,6 +20,12 @@ namespace MyGame.Components
         {
             this.game = game;
             this.input = input;
+        }
+
+        public void SetRenderSize(Vector2 renderSize)
+        {
+            this.renderSize = renderSize;
+            RecalcViewPort();
         }
 
         public void Update(TimeSpan frameTime)
@@ -42,8 +50,20 @@ namespace MyGame.Components
 
             if (Center.Y > game.PlaygroundSize.Y)
                 Center = new Vector2(Center.X, game.PlaygroundSize.Y);
+
+            RecalcViewPort();
         }
 
-        public Vector2 Center { get; set; }
+        private void RecalcViewPort()
+        {
+            float offsetX = game.Camera.Center.X - (this.renderSize.X / 2);
+            float offsetY = game.Camera.Center.Y - (this.renderSize.Y / 2);
+
+            ViewPort = new RectangleF(offsetX, offsetY, renderSize.X, renderSize.Y);
+        }
+
+        public Vector2 Center { get; private set; }
+
+        public RectangleF ViewPort { get; set; }
     }
 }

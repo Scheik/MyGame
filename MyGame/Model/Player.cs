@@ -16,6 +16,8 @@ namespace MyGame.Model
 
         public Vector2 Position { get; set; }
 
+        public float Radius { get; private set; }
+
         public float Angle { get; private set; }
 
         public PlayerState State { get; private set; }
@@ -23,6 +25,7 @@ namespace MyGame.Model
         public Player(Input input)
         {
             this.input = input;
+            Radius = 10;
         }
 
         public void Update(TimeSpan frameTime)
