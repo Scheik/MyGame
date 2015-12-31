@@ -34,7 +34,6 @@
             this.programmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.renderControl = new MyGame.RenderControl();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,25 +76,16 @@
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // renderControl
-            // 
-            this.renderControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.renderControl.Game = null;
-            this.renderControl.Location = new System.Drawing.Point(0, 24);
-            this.renderControl.Name = "renderControl";
-            this.renderControl.Size = new System.Drawing.Size(800, 433);
-            this.renderControl.TabIndex = 2;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 479);
-            this.Controls.Add(this.renderControl);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(300, 200);
             this.Name = "MainForm";
             this.Text = "MyGame";
             this.menuStrip1.ResumeLayout(false);
@@ -112,7 +102,6 @@
         private System.Windows.Forms.ToolStripMenuItem programmToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private RenderControl renderControl;
     }
 }
 

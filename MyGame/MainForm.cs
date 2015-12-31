@@ -19,6 +19,7 @@ namespace MyGame
         private Input input = new Input();
         private Game game;
         private Stopwatch watch = new Stopwatch();
+        private RenderControl renderControl;
 
         public MainForm()
         {
@@ -26,9 +27,11 @@ namespace MyGame
 
             game = new Game(input);
 
-            watch.Start();
-            renderControl.Game = game;
-            game.PlaygroundSize = new Point(renderControl.ClientSize.Width, renderControl.ClientSize.Height);
+            renderControl = new RenderControl(game);
+            renderControl.Dock = DockStyle.Fill;
+            this.Controls.Add(renderControl);
+
+            watch.Start();            
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

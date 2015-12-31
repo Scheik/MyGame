@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\Input.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="MainForm.cs">
@@ -93,8 +94,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\grass.png">
+    <Content Include="Assets\dirt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\grass.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sprite.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

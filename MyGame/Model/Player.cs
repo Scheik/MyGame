@@ -18,6 +18,8 @@ namespace MyGame.Model
 
         public float Angle { get; private set; }
 
+        public PlayerState State { get; private set; }
+
         public Player(Input input)
         {
             this.input = input;
@@ -30,14 +32,23 @@ namespace MyGame.Model
 
             velocity = velocity.Normalized();
 
-            if (velocity.Length() != 0f)
+            if (velocity.Length() > 0f)
             {
+                State = PlayerState.Walk;
                 Angle = velocity.Angle();
-
                 Position += (velocity * MAXSPEED * (float)frameTime.TotalSeconds);
-            }
-
-            
+            } 
+            else
+            {
+                State = PlayerState.Idle;
+            }           
         }
+
+        internal enum PlayerState
+        {
+            Idle,
+            Walk
+        }
+
     }
 }

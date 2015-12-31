@@ -12,69 +12,95 @@ using MyGame.Model;
 
 namespace MyGame
 {
-    public partial class RenderControl : UserControl
+    internal partial class RenderControl : UserControl
     {
         private int SPRITE_WIDTH = 57;
         private int SPRITE_HEIGHT = 57;
 
         private Stopwatch watch = new Stopwatch();
 
-        internal Game Game { get; set; }
+        private readonly Game game;
 
-        private Image grass;
-        private Image sprite;
+        private readonly Image grass;
+        private readonly Image dirt;
+        private readonly Image sprite;
 
-        public RenderControl()
+        public RenderControl(Game game)
         {
             InitializeComponent();
+            this.game = game;
 
+            dirt = Image.FromFile("Assets/dirt.png");
             grass = Image.FromFile("Assets/grass.png");
             sprite = Image.FromFile("Assets/sprite.png");
 
             watch.Start();
         }
 
-        protected override void OnResize(EventArgs e)
-        {
-            if (Game != null)
-            {
-                Game.PlaygroundSize = new Point(ClientSize.Width, ClientSize.Height);
-            }
-            base.OnResize(e);
-        }
-
         protected override void OnPaint(PaintEventArgs e)
         {
-            e.Graphics.Clear(Color.CornflowerBlue);
+            float direction = (game.Player.Angle * 360) / (float)(2 * Math.PI);
+            direction += 225;
+            int sector = (int)(direction / 90);
 
-            for (int x = 0; x < ClientSize.Width; x += grass.Width)
+            int offsety = 0;
+            switch (sector)
             {
-                for (int y = 0; y < ClientSize.Height; y += grass.Height)
-                {
-                    e.Graphics.DrawImage(grass, new Point(x, y));
-                }
+                case 1: offsety = 3 * SPRITE_HEIGHT; break;
+                case 2: offsety = 2 * SPRITE_HEIGHT; break;
+                case 3: offsety = 0 * SPRITE_HEIGHT; break;
+                case 4: offsety = 1 * SPRITE_HEIGHT; break;
             }
 
-            
+            e.Graphics.Clear(Color.CornflowerBlue);
 
-            if (Game == null)
+            int offsetX = (int)game.Camera.Center.X - (this.ClientSize.Width / 2);
+            int offsetY = (int)game.Camera.Center.Y - (this.ClientSize.Height / 2);
+
+            int cellX1 = Math.Max(0, (int)(offsetX / 100));
+            int cellY1 = Math.Max(0, (int)(offsetY / 100));
+
+            int cellCountX = (ClientSize.Width / grass.Width) + 2;
+            int cellCountY = (ClientSize.Height / grass.Height) + 2;
+
+            int cellX2 = Math.Min(cellX1 + cellCountX, (int)game.PlaygroundSize.X / grass.Width);
+            int cellY2 = Math.Min(cellY1 + cellCountY, (int)game.PlaygroundSize.Y / grass.Height);
+
+            for (int x = cellX1; x < cellX2 + cellCountX ; x ++)
+            {
+                for (int y = cellY1; y < cellY2; y ++)
+                {
+                    e.Graphics.DrawImage(grass, new Point(
+                        x*grass.Width -offsetX, 
+                        y* grass.Height - offsetY));
+                }
+            }           
+
+            if (game == null)
                 return;
             using (Brush brush = new SolidBrush(Color.Yellow))
             {
                 int frame = (int)(watch.ElapsedMilliseconds / 250) % 4;
 
                 int offsetx = 0;
-                switch (frame)
+                if (game.Player.State == Player.PlayerState.Walk)
                 {
-                    case 0: offsetx = 0; break;
-                    case 1: offsetx = SPRITE_WIDTH; break;
-                    case 2: offsetx = 2 * SPRITE_WIDTH; break;
-                    case 3: offsetx = SPRITE_WIDTH; break;
+                    switch (frame)
+                    {
+                        case 0: offsetx = 0; break;
+                        case 1: offsetx = SPRITE_WIDTH; break;
+                        case 2: offsetx = 2 * SPRITE_WIDTH; break;
+                        case 3: offsetx = SPRITE_WIDTH; break;
+                    }
                 }
-
+                else
+                {
+                    offsetx = SPRITE_WIDTH;
+                }
+                
                 e.Graphics.DrawImage(sprite, 
-                    new RectangleF(Game.Player.Position.X, Game.Player.Position.Y, SPRITE_WIDTH, SPRITE_HEIGHT), 
-                    new RectangleF(offsetx, 0, SPRITE_WIDTH, SPRITE_HEIGHT), 
+                    new RectangleF(game.Player.Position.X - offsetX, game.Player.Position.Y - offsetY, SPRITE_WIDTH, SPRITE_HEIGHT), 
+                    new RectangleF(offsetx, offsety, SPRITE_WIDTH, SPRITE_HEIGHT), 
                     GraphicsUnit.Pixel);
             }
         }
