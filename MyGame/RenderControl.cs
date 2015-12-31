@@ -40,7 +40,7 @@ namespace MyGame
         protected override void OnPaint(PaintEventArgs e)
         {
             float direction = (game.Player.Angle * 360) / (float)(2 * Math.PI);
-            direction += 225;
+            direction += 230;
             int sector = (int)(direction / 90);
 
             int offsety = 0;
@@ -52,27 +52,27 @@ namespace MyGame
                 case 4: offsety = 1 * SPRITE_HEIGHT; break;
             }
 
-            e.Graphics.Clear(Color.CornflowerBlue);
+            e.Graphics.Clear(Color.Black);
 
             int offsetX = (int)game.Camera.Center.X - (this.ClientSize.Width / 2);
             int offsetY = (int)game.Camera.Center.Y - (this.ClientSize.Height / 2);
 
-            int cellX1 = Math.Max(0, (int)(offsetX / 100));
-            int cellY1 = Math.Max(0, (int)(offsetY / 100));
+            int cellX1 = Math.Max(0, (int)(offsetX / dirt.Width));
+            int cellY1 = Math.Max(0, (int)(offsetY / dirt.Height));
 
-            int cellCountX = (ClientSize.Width / grass.Width) + 2;
-            int cellCountY = (ClientSize.Height / grass.Height) + 2;
+            int cellCountX = (ClientSize.Width / dirt.Width) + 2;
+            int cellCountY = (ClientSize.Height / dirt.Height) + 2;
 
-            int cellX2 = Math.Min(cellX1 + cellCountX, (int)game.PlaygroundSize.X / grass.Width);
-            int cellY2 = Math.Min(cellY1 + cellCountY, (int)game.PlaygroundSize.Y / grass.Height);
+            int cellX2 = Math.Min(cellX1 + cellCountX, (int)game.PlaygroundSize.X / dirt.Width);
+            int cellY2 = Math.Min(cellY1 + cellCountY, (int)game.PlaygroundSize.Y / dirt.Height);
 
             for (int x = cellX1; x < cellX2 + cellCountX ; x ++)
             {
                 for (int y = cellY1; y < cellY2; y ++)
                 {
-                    e.Graphics.DrawImage(grass, new Point(
-                        x*grass.Width -offsetX, 
-                        y* grass.Height - offsetY));
+                    e.Graphics.DrawImage(dirt, new Point(
+                        x* dirt.Width -offsetX, 
+                        y* dirt.Height - offsetY));
                 }
             }           
 
