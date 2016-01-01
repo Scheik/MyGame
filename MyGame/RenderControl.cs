@@ -50,23 +50,15 @@ namespace MyGame
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            float direction = (game.Player.Angle * 360) / (float)(2 * Math.PI);
-            direction += 230;
-            int sector = (int)(direction / 90);
-
-            int offsety = 0;
-            switch (sector)
-            {
-                case 1: offsety = 3 * SPRITE_HEIGHT; break;
-                case 2: offsety = 2 * SPRITE_HEIGHT; break;
-                case 3: offsety = 0 * SPRITE_HEIGHT; break;
-                case 4: offsety = 1 * SPRITE_HEIGHT; break;
-            }
+            //float scale = 10f;
 
             e.Graphics.Clear(Color.Black);
 
-            int cellX1 = Math.Max(0, (int)(game.Camera.ViewPort.X / 100));
-            int cellY1 = Math.Max(0, (int)(game.Camera.ViewPort.Y / 100));
+            if (DesignMode)
+                return;
+
+            int cellX1 = Math.Max(0, (int)(game.Camera.ViewPort.X) / Map.CELLSIZE);
+            int cellY1 = Math.Max(0, (int)(game.Camera.ViewPort.Y) / Map.CELLSIZE);
 
             int cellCountX = (ClientSize.Width / dirt.Width) + 2;
             int cellCountY = (ClientSize.Height / dirt.Height) + 2;
@@ -78,11 +70,31 @@ namespace MyGame
             {
                 for (int y = cellY1; y < cellY2; y ++)
                 {
-                    e.Graphics.DrawImage(dirt, new Point(
-                        (int)(x* dirt.Width - game.Camera.ViewPort.X), 
-                        (int)(y* dirt.Height - game.Camera.ViewPort.Y)));
+                    switch (game.Map.Cells[x, y])
+                    {
+                        case CellType.Gras:
+                            //using (SolidBrush grasbrush = new SolidBrush(Color.Green))
+                            //{
+                            //    e.Graphics.FillRectangle(grasbrush, new Rectangle(
+                            //        (int)(x * dirt.Width - game.Camera.ViewPort.X),
+                            //        (int)(y * dirt.Height - game.Camera.ViewPort.Y), 
+                            //        Map.CELLSIZE, 
+                            //        Map.CELLSIZE ));
+                            //}
+                            e.Graphics.DrawImage(grass, new Point(
+                               (int)(x * grass.Width - game.Camera.ViewPort.X),
+                               (int)(y * grass.Height - game.Camera.ViewPort.Y)));
+                            break;
+                                
+                        case CellType.Sand:
+                            e.Graphics.DrawImage(dirt, new Point(
+                               (int)(x * dirt.Width - game.Camera.ViewPort.X),
+                               (int)(y * dirt.Height - game.Camera.ViewPort.Y)));
+                            break;
+                    }
+                   
                 }
-            }           
+            }
 
             if (game == null)
                 return;
@@ -104,6 +116,19 @@ namespace MyGame
                 else
                 {
                     offsetx = SPRITE_WIDTH;
+                }
+
+                float direction = (game.Player.Angle * 360) / (float)(2 * Math.PI);
+                direction += 230;
+                int sector = (int)(direction / 90);
+
+                int offsety = 0;
+                switch (sector)
+                {
+                    case 1: offsety = 3 * SPRITE_HEIGHT; break;
+                    case 2: offsety = 2 * SPRITE_HEIGHT; break;
+                    case 3: offsety = 0 * SPRITE_HEIGHT; break;
+                    case 4: offsety = 1 * SPRITE_HEIGHT; break;
                 }
 
                 Point spriteCenter = new Point(27, 48);
