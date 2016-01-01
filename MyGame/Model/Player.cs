@@ -12,7 +12,7 @@ namespace MyGame.Model
     {
         private Input input;
 
-        public readonly float MAXSPEED=100f;
+        public readonly float MAXSPEED=200f;
 
         public Vector2 Position { get; set; }
 
